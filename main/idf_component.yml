@@ -1,0 +1,5 @@
+dependencies:
+  idf: '>=4.4'
+  u8g2:
+    git: https://github.com/olikraus/u8g2.git
+  esp-idf-lib/encoder: '*'

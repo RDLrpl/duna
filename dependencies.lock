@@ -1,0 +1,38 @@
+dependencies:
+  esp-idf-lib/encoder:
+    component_hash: 0ac3bb66deff664544512216b30b38f05c6c45f42329afb8f089d196a6c6d30c
+    dependencies: []
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    targets:
+    - esp32
+    - esp32c2
+    - esp32c3
+    - esp32c5
+    - esp32c6
+    - esp32c61
+    - esp32h2
+    - esp32p4
+    - esp32s2
+    - esp32s3
+    version: 3.0.2
+  idf:
+    source:
+      type: idf
+    version: 6.1.0
+  u8g2:
+    component_hash: ff0a6c16a8778f5e650b5d16c9dcf5b7fa47b606755b00d7dd24545ceb845b62
+    dependencies: []
+    source:
+      git: https://github.com/olikraus/u8g2.git
+      path: .
+      type: git
+    version: 9a93ba2e383afb02313c4805b321316aa9b0d2da
+direct_dependencies:
+- esp-idf-lib/encoder
+- idf
+- u8g2
+manifest_hash: f228e384b105ba4d19f36a228135ad8a46846ce17cddac32baed78ea37bb34c2
+target: esp32
+version: 3.0.0
