@@ -1,7 +1,7 @@
 #ifndef TRANSITION_H
 #define TRANSITION_H
-#include "u8g2.h"
+#include "lvgl.h"
 
-void draw_welcome(u8g2_t *disp);
+void draw_welcome(lv_disp_t *disp);
 
 #endif
