@@ -15,6 +15,7 @@ void init_ga(void) {
         .sda_io_num = I2C_SDA_PIN,
         .glitch_ignore_cnt = 7,
         .flags.enable_internal_pullup = true,
+        // .trans_queue_depth = 10,
     };
     i2c_master_bus_handle_t bus_handle;
 
@@ -82,5 +83,14 @@ void clean_screen(lv_disp_t *disp) {
 
     lv_obj_t *scr = lv_disp_get_scr_act(disp);
     lv_obj_clean(scr);
+    lvgl_port_unlock();
+}
+
+void change_application_screen(lv_obj_t * new_scr) {
+    if (new_scr == NULL) return;
+    if (!lvgl_port_lock(0)) return;
+
+    lv_screen_load_anim(new_scr, LV_SCR_LOAD_ANIM_NONE, 300, 0, true);
+
     lvgl_port_unlock();
 }

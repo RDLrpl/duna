@@ -1,21 +1,18 @@
 #ifndef HANDLERS_H
 #define HANDLERS_H
 
-#include "encoder.h"
-
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef enum {
-    PAD_NONE = 0,
-    PAD_CLICK,
-    PAD_LONG
-} pad_event_t;
+typedef struct {
+    int16_t deltax;
+    int16_t deltay;
+    bool clk;
+    bool long_clk;
+} PadHandler;
 
-void encoder_event_handler(const rotary_encoder_event_t *event, void *ctx);
-void encoder_init(void);
-
-int32_t     pad_take_encoder_change(void);
-pad_event_t pad_take_event(void);
+void init_joystick(void);
+void handle_joystick(void);
+PadHandler get_pad_handler(void);
 
 #endif

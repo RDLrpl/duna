@@ -5,6 +5,7 @@
 #include "esp_log.h"
 
 static bool sd_card_mounted = false;
+static bool spi_bus_initialized = false;
 esp_err_t ret;
 sdmmc_card_t *card;
 
@@ -24,6 +25,12 @@ bool* is_mounted(void) {
 }
 
 void init_sd(void) {
+    if (spi_bus_initialized) {
+        slot_config.gpio_cs = PIN_SD_CS;
+        slot_config.host_id = host.slot;
+        return;
+    }
+
     host.slot = SPI3_HOST; 
 
     spi_bus_config_t bus_cfg = {
@@ -36,10 +43,12 @@ void init_sd(void) {
     };
 
     ret = spi_bus_initialize(host.slot, &bus_cfg, SDSPI_DEFAULT_DMA);
-    if (ret != ESP_OK) {
+    if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
         return;
     }
-    
+
+    spi_bus_initialized = true;
+
     slot_config.gpio_cs = PIN_SD_CS;
     slot_config.host_id = host.slot;
 }
@@ -61,4 +70,18 @@ void mount_sd(void) {
     }
 
     sd_card_mounted = true;
+}
+
+void unmount_sd(void) {
+    if (!sd_card_mounted) {
+        return;
+    }
+
+    ret = esp_vfs_fat_sdcard_unmount(MOUNT_POINT, card);
+    if (ret == ESP_OK) {
+        sd_card_mounted = false;
+        ESP_LOGI(TAG, "Card unmounted, VFS memory freed.");
+    } else {
+        ESP_LOGE(TAG, "Failed to unmount card: %s", esp_err_to_name(ret));
+    }
 }

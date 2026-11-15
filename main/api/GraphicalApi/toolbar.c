@@ -1,8 +1,10 @@
 #include "toolbar.h"
 #include "config.h"
+#include <string.h>
 #include "esp_lvgl_port.h"
 #include "misc/lv_text_private.h"
 #include "lvgl.h"
+#include "draw/lv_draw.h" 
 
 static lv_obj_t * toolbar_canvas = NULL;
 static uint16_t canvas_buffer[DISPLAY_H * TOOLBAR_H_PX * 2];
@@ -10,6 +12,11 @@ static uint16_t canvas_buffer[DISPLAY_H * TOOLBAR_H_PX * 2];
 void toolbar_init(void)
 {
     if (!lvgl_port_lock(0)) return;
+
+    if (toolbar_canvas != NULL) {
+        lv_obj_delete(toolbar_canvas);
+        toolbar_canvas = NULL;
+    }
 
     lv_obj_t * top = lv_layer_top();
 
@@ -22,10 +29,23 @@ void toolbar_init(void)
     lvgl_port_unlock();
 }
 
-void toolbar_update(const char * time_str, const char * charge_str)
+bool toolbar_update(const char * time_str, const char * charge_str)
 {
-    if (!toolbar_canvas) return;
-    if (!lvgl_port_lock(0)) return;
+    if (!toolbar_canvas) return false;
+
+    static char last_time[16] = "";
+    static char last_charge[16] = "";
+
+    if (strcmp(time_str, last_time) == 0 &&
+        strcmp(charge_str, last_charge) == 0) {
+        return false;
+    }
+
+
+    if (!lvgl_port_lock(120)) return false;
+
+    strlcpy(last_time, time_str, sizeof(last_time));
+    strlcpy(last_charge, charge_str, sizeof(last_charge));
 
     lv_canvas_fill_bg(toolbar_canvas, OFFPIXEL, LV_OPA_COVER);
 
@@ -66,8 +86,11 @@ void toolbar_update(const char * time_str, const char * charge_str)
     lv_draw_label(&layer, &charge, &coords_charge);
 
     lv_canvas_finish_layer(toolbar_canvas, &layer);
+    
+    lv_draw_dispatch();
 
     lvgl_port_unlock();
+    return true;
 }
 
 void toolbar_set_visible(bool visible)

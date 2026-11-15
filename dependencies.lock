@@ -1,7 +1,11 @@
 dependencies:
-  esp-idf-lib/encoder:
-    component_hash: 0ac3bb66deff664544512216b30b38f05c6c45f42329afb8f089d196a6c6d30c
-    dependencies: []
+  esp-idf-lib/ds1302:
+    component_hash: 7a9f8c8f970affd060b980080cde6c95bbdd3b78069361f5c441fad19ce3cfe0
+    dependencies:
+    - name: esp-idf-lib/esp_idf_lib_helpers
+      registry_url: https://components.espressif.com
+      require: private
+      version: '*'
     source:
       registry_url: https://components.espressif.com/
       type: service
@@ -16,7 +20,25 @@ dependencies:
     - esp32p4
     - esp32s2
     - esp32s3
-    version: 3.0.2
+    version: 1.2.0
+  esp-idf-lib/esp_idf_lib_helpers:
+    component_hash: 689853bb8993434f9556af0f2816e808bf77b5d22100144b21f3519993daf237
+    dependencies: []
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    targets:
+    - esp32
+    - esp32c2
+    - esp32c3
+    - esp32c5
+    - esp32c6
+    - esp32c61
+    - esp32h2
+    - esp32p4
+    - esp32s2
+    - esp32s3
+    version: 1.4.0
   espressif/esp_lvgl_port:
     component_hash: d3c020b45c3dfc0d1706a83b63a1c34a6eb444a6e935f9afff79f92b7b94dcef
     dependencies:
@@ -43,10 +65,10 @@ dependencies:
       type: service
     version: 9.5.0
 direct_dependencies:
-- esp-idf-lib/encoder
+- esp-idf-lib/ds1302
 - espressif/esp_lvgl_port
 - idf
 - lvgl/lvgl
-manifest_hash: bea86a72c358d1f9a1d2f796cfd05ba02a5283d480ff622f7c1617ad638bc23c
+manifest_hash: 3f9a0282445a1335cb160a4bc981ebf572349594c2aefa8a9dfda28f387f2f04
 target: esp32
 version: 3.0.0

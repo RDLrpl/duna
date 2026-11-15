@@ -7,5 +7,6 @@ extern lv_disp_t * disp;
 
 void init_ga(void);
 void clean_screen(lv_disp_t *disp);
+void change_application_screen(lv_obj_t * new_scr);
 
 #endif
